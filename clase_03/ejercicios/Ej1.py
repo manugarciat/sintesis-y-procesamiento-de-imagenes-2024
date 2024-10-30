@@ -1,6 +1,6 @@
 import numpy as np
 import os, sys
-from helper_functions_solving import cnnConvolve, loadDataset
+from helper_functions import cnnConvolve, loadDataset
 # ======================================================================
 #  PASO 1: Implementar y Testear la convolucion
 #   En esta etapa, se debe implementar la operacion de convolucion. Se
