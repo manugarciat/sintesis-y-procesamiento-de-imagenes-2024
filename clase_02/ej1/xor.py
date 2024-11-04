@@ -37,7 +37,7 @@ T = np.array([-1, 1, 1, -1])
 # Hidden weights (NhxNi)
 Wh = np.array([[0.3615, -1.4145], [-0.8916, 0.2010]]).reshape((Nh, Ni))
 # Output weights (NoxNh)
-Wo = np.array([-1.1678, -0.2166]) #.reshape((1, Nh))
+Wo = np.array([-1.1678, -0.2166]).reshape((1, Nh))
 # Los bias se fijan a un valor igual a 1. No hay aprendizaje en ellos.
 bo = 1
 bh = 1
@@ -48,7 +48,7 @@ m = 0
 while m < epochs:
     for i in range(M):
         # voy a tomar uno a uno los puntos para actualizar los pesos
-        Xm = X[:, i] #.reshape((Ni, 1))
+        Xm = X[:, i].reshape((Ni, 1))
         tk = T[i]
         # Forward propagation desde la entrada X
         # Calcular primero las aj en las neuronas escondidas
@@ -61,25 +61,25 @@ while m < epochs:
         # Evaluar ahora el delta_k a la salida: 
         delta_k = eta * (tk - zk) * dfo * y  ##%% ESCRIBIR EL CODIGO AQUI
         # ...y delta_j:
-        delta_j = eta * (tk - zk) * dfo * (np.ones((Nh, Ni)) * Wo * dfh).T * Xm  ## %% ESCRIBIR EL CODIGO AQUI
+        delta_j = eta * (tk - zk) * dfo * (np.ones((Nh, Ni)) * Wo.T * dfh) * Xm.T  ## %% ESCRIBIR EL CODIGO AQUI
         # % Ahora se actualizan los pesos
         ## los pesos de la capa de salida
-        Wo = Wo + delta_k  ##; %% ESCRIBIR CODIGO AQUI
+        Wo = Wo + delta_k.T  ##; %% ESCRIBIR CODIGO AQUI
         ##% los pesos de la capa escondida
         Wh = Wh + delta_j  ##; %% ESCRIBIR CODIGO AQUI
 
     # Calculate total error
     J[m] = 0
     for i in range(M):
-        Xm = X[:, i] #.reshape((Ni, 1))
+        Xm = X[:, i].reshape((Ni, 1))
         aj = (Wh @ Xm) + bh  ## %% ESCRIBIR EL CODIGO AQUI
         [y, dfh] = activation(aj)
         ak = (Wo @ y) + bo  ## %% ESCRIBIR EL CODIGO AQUI
         [zk, dfo] = activation(ak)
-        J[m] = J[m] + (T[i] - zk) ** 2
+        J[m] = J[m] + (T[i] - zk.item()) ** 2
 
     J[m] = J[m] / M
-    print('Iteracion %d: Error Total %f' % (m, J[m]))
+    print('Iteracion %d: Error Total %f' % (m, J[m].item()))
     m = m + 1
 
 # El error a la salida debe ser aproximadamente 0.00071965
